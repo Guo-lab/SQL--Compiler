@@ -1,0 +1,8 @@
+(base) GSQdeMacBook-Pro:SQL--Compiler gsq$ cd "/Users/gsq/Desktop/SQL--Compiler/" && g++ -std=c++11 SqlCompiler.cpp -o SqlCompiler && "/Users/gsq/Desktop/SQL--Compiler/"SqlCompiler
+Start to compile.
+After skipping Blank
+S
+
+
+
+Bus error: 10
