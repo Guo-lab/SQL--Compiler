@@ -441,7 +441,7 @@ TokenNode getNextToken() {
  */
 void scanner() {
     FILE *infile;
-    string Filename = "sql/test.txt";
+    string Filename = "test.txt";
     ifstream in(Filename);
     
     code = "";

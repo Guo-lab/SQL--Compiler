@@ -1,0 +1,34 @@
+SELECT b FROM Article_DataItem,
+SELECT a FROM Video_basic WHERE title LIKE '%{}%',
+
+INSERT INTO A(name, gender) VALUES('lihua', M),
+
+UPDATE Video_basic SET title='%s', videos=%s, Tag_partition='%s', duration=%s WHERE BVID='%s',
+
+DELETE FROM Video_basic WHERE BVID = '%s',
+
+SELECT a, b FROM C INNER JOIN D ON D.t = C.t,
+SELECT a, b FROM C LEFT JOIN D ON D.t = C.t AND b IS NOT NULL AND a LIKE '%HAHA',
+SELECT a, b FROM C RIGHT JOIN D ON D.t = C.t RIGHT JOIN e ON D.g = e.g,
+
+SELECT StockCode,AVG(DISTINCT UnitPrice) AS avgUnitPrice, SUM(Quantity) AS sumOfQuantity FROM data GROUP BY StockCode HAVING SUM(column_name)>1500,
+SELECT Country,MAX(UnitPrice*Quantity) AS sumOfPrice FROM data GROUP BY Country,
+SELECT StockCode,MIN(Quantity) AS sumOfQuantity FROM data GROUP BY StockCode ORDER BY sumOfQuantity DESC LIMIT 10,
+
+
+SELECT Country,COUNT(DISTINCT CustomerID) AS countOfCustomer FROM data GROUP BY Country ORDER BY countOfCustomer DESC LIMIT 10,
+SELECT Country AS Country2,COUNT(DISTINCT InvoiceNo) AS countOfBuy FROM data WHERE InvoiceNo NOT LIKE 'C%' GROUP BY Country2,
+SELECT Country,COUNT(DISTINCT InvoiceNo) AS countOfReturnInvoice FROM data WHERE InvoiceNo LIKE 'C%' GROUP BY Country ORDER BY countOfReturnInvoice DESC LIMIT 10,
+
+SELECT A FROM C WHERE K='Lala'
+UNION
+SELECT A FROM D WHERE mm>2000,
+SELECT A FROM C WHERE K='Lala'
+INTERSECT
+SELECT A FROM D WHERE mm>2000,
+SELECT A FROM C WHERE K='Lala'
+UNION ALL
+SELECT A FROM D WHERE mm>2000,
+
+
+

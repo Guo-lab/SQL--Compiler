@@ -1,0 +1,5 @@
+SELECT a FROM b,
+SELECT t.c FROM t WHERE t.a > 0,
+SELECT a.t FROM B WHERE (c > d),
+SELECT a.t FROM B WHERE (c > d && t = 'adc'),
+SELECT a.t FROM B WHERE (c > d AND t = 'adc'),
