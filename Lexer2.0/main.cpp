@@ -46,10 +46,10 @@ int main() {
 	f.close();
 
     
-	////f.open("data_parser.txt",ios::out);
-    ////for(auto token:tokenlists)
-    ////    f<<token.str<<"\n"<<TokenDict[token.type]<<"\n";
-	////f.close();
+	f.open("../Parser/data.txt",ios::out);
+    for(auto token:tokenlists)
+       f<<token.str<<"\n"<<TokenDict[token.type]<<"\n";
+	f.close();
     return 0;
 }
 
