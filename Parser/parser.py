@@ -40,19 +40,166 @@ def make_grammar():
         #//print(a)
         pass
     
+    
+# //// ###########################    
+# A Context free grammar (CFG) consists of
+# - A set of terminals
+# - A set of non-terminals
+# - A Start symbol
+# - A set of productions
+# //// ###########################  
 
- 
+# Parse tree shows the association of operations 
+
+# Abstract syntax tree
+
+
+
+
 
 
 FIRST_LIST = {}
 FOLLOW_LIST = {}
 
-# Get FIRST SET and FOLLOW SET     
+# Get FIRST SET and FOLLOW SET  
+#@ First (terminals) = {terminals}
+#@ For Non-Terminals:
+#@ - First (NonTerminals) += {A | Nonterminals => *A...}
+#@ - First (Non) += First(B) if Nonterminals => $ B [ Nonterminals => $ || (Nonterminals => C, C => $)]
 def make_FIRST():
-    pass  
+    # In Mark, non-terminals
+    for m in Mark: 
+        FIRST_LIST[m] = []
+
+    flag = True # 判断first集是否有变化 #*
+    
+    while flag:
+        flag = False #*
+        
+        for key, values in Grammar.items():
+            tmp = len(FIRST_LIST.get(key)) #*
+            
+            for vals in values:
+                vals = vals.split(' ')
+                #//print(vals)
+                for i, val in enumerate(vals):
+                    # val is a non-terminal
+                    #//print(i, val)
+                    #//print(vals)
+                    if val in Mark:
+                        list1 = FIRST_LIST.get(key)
+                        list2 = FIRST_LIST.get(val).copy()
+                        
+                        # 该非终止符不在最后的位置$就不能算
+                        if '$' in list2 and i != len(vals) - 1:
+                            list2.remove('$')
+                        
+                        FIRST_LIST[key] = list(set(list1+list2))
+                        
+                        # 作为一个没有$的非终止符
+                        if '$' not in FIRST_LIST[val]:
+                            break
+                        
+                    # val is terminal
+                    else:
+                        if val not in FIRST_LIST[key]:
+                            FIRST_LIST[key].append(val)
+                            # 终止符 FIRST岂能没有她
+                        break
+            
+            # when all key FIRST not changed    
+            if tmp != len(FIRST_LIST.get(key)): #*
+                flag = True #*
+        # While ends and make_FIRST done
+    pass
+
+#@ FOLLOW (Start Symbol) = {$}
+#@ FOLLOW (A) += {t} when [ => ...At ]
+#@ FOLLOW (A) += (FIRST(B) - {$}) when [ => ...AB ]
+#@ FOLLOW (A) += FOLLOW(X) when [ X => ...AB AND First(B) has $] B can disappear which belongs to X also belongs to A
 def make_FOLLOW():
+    # In Mark, still non-terminals
+    for m in Mark:
+        FOLLOW_LIST[m] = []
+    
+    FOLLOW_LIST['root'] = ['#']
+    
+    flag = True # 判断FOLLOW集是否有变化 #*
+    
+    while flag:
+        flag = False #*
+        
+        for key, values in Grammar.items():
+            #@ [ => values ]
+            for vals in values:
+                #@ in values, it may be jointed like [A => 'B', 'B C']
+                vals = vals.split(' ')
+                enumlist = list(enumerate(vals))
+                #@ [[B] [B, C]]
+                for val in enumlist:
+                    #//print(val) # like (5, 'updatedElementListRec')
+                    #//print(val[1])
+                    # Only if it is non-terminal
+                    if val[1] in Mark:
+                        tmp = len(FOLLOW_LIST.get(val[1])) #*
+                        isp = True #%
+                        
+                        listN = []
+                        list2 = FOLLOW_LIST.get(val[1])
+                        #//print(list2)
+                        list3 = []
+
+                        #//print(val[0]+1, len(enumlist))
+                        for i in range(val[0]+1, len(enumlist)):
+                            #! check following terminals or non-terminals 
+                            if enumlist[i][1] in Mark: 
+                                
+                                listN = list(set(listN + FIRST_LIST.get(enumlist[i][1])))
+                                
+                                if '$' not in FIRST_LIST.get(enumlist[i][1]):
+                                    isp = False #%
+                                    break
+                                # NO $ in FOLLOW()
+                                else:
+                                    listN.remove('$')
+                                    
+                            else:
+                                isp = False #%
+                                # just put the terminal ones into FOLLOW 
+                                listN = list(set(listN + [enumlist[i][1]]))
+                                break
+
+                        if val[0] == len(vals) - 1 or isp: #%
+                            #% isp true means behind val[0] each has $
+                            list3 = FOLLOW_LIST.get(key)
+                            
+                        FOLLOW_LIST[val[1]] = list(set(listN+list2+list3))
+                        
+                        # When FOLLOW not changed any more
+                        if tmp != len(FOLLOW_LIST.get(val[1])): #*
+                            flag = True #*
+                        # compare tmp, if any changed like c in [A=>'B','BC'], continue
+        # While ends and FOLLOW not changed
+
     pass
     
+        
+        
+        
+        
+        
+
+
+
+
+
+def make_Parsing_Tables():
+    
+    pass
+        
+        
+        
+        
         
         
         
@@ -63,5 +210,13 @@ if __name__ == '__main__':
     make_token()
     make_grammar()
     
+    # In Both Function below we can only consider non-terminals
     make_FIRST()
     make_FOLLOW()
+    
+    print('Have Built FIRST and FOLLOW SET.')
+    
+    make_Parsing_Tables()
+    print('Have Built Parsing Tables.')
+    
+    
