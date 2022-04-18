@@ -20,6 +20,7 @@ def make_token():
 
 Mark = [] # non-terminal 
 Grammar = {} 
+Grammar2 = {} 
 
 #@Get Grammar List
 def make_grammar():
@@ -33,12 +34,24 @@ def make_grammar():
             Grammar[line.split('-> ')[0].split('.')[1].strip()].append(line.split('-> ')[1].strip('\n'))
         else:
             Grammar[line.split('-> ')[0].split('.')[1].strip()] = [line.split('-> ')[1].strip('\n')]
-            
+        
+        # For Parsing Table:
+        #@ When Creating Parsing Table, distinct key is needed 
+        Grammar2[(line.split('-> ')[0].split('.')[1].strip(), line.split('-> ')[0].split('.')[0]) ] = line.split('-> ')[1].strip('\n')
     file.close()
 
     for a in Grammar.items():
         #//print(a)
         pass
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 # //// ###########################    
@@ -52,6 +65,22 @@ def make_grammar():
 # Parse tree shows the association of operations 
 
 # Abstract syntax tree
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -111,7 +140,11 @@ def make_FIRST():
             if tmp != len(FIRST_LIST.get(key)): #*
                 flag = True #*
         # While ends and make_FIRST done
-    pass
+    
+    for a in FIRST_LIST.items():
+    #//    print(a)
+        pass
+
 
 #@ FOLLOW (Start Symbol) = {$}
 #@ FOLLOW (A) += {t} when [ => ...At ]
@@ -181,8 +214,10 @@ def make_FOLLOW():
                         # compare tmp, if any changed like c in [A=>'B','BC'], continue
         # While ends and FOLLOW not changed
 
-    pass
-    
+    for a in FOLLOW_LIST.items():
+    #//    print(a)
+        pass
+      
         
         
         
@@ -192,10 +227,75 @@ def make_FOLLOW():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#@ A -> a
+#@ - each terminal t in FIRST(a) T[A, t] = a WHEN A -a-> t      (1)
+
+#@ - $ in FIRST(a); t in FOLLOW(A) T[A, t] = a WHEN A-$in(a)->t (2)
+#@ - $ in FIRST(a); # in FOLLOW(A) T[A, $] = a                  (3)
+
+#! a is one group set
+Table = {}
 
 def make_Parsing_Tables():
-    
-    pass
+    for key, values in Grammar2.items():
+        #//print(key)
+        #//print(values)  
+        vals = values.split(' ')
+        #//print(vals)
+        enumlist = list(enumerate(vals))
+        #//print(enumlist) # like [(0, ','), (1, 'expressionOrDefault'), (2, 'expressionOrDefaultListRec')]
+        listN = []
+        isp = True
+        
+        for i in range(len(enumlist)):
+            # if it is in non-terminal
+            if enumlist[i][1] in Mark:
+                listN = list(set(listN + FIRST_LIST.get(enumlist[i][1])))
+                
+                if '$' not in FIRST_LIST.get(enumlist[i][1]):
+                    isp = False
+                    break
+                else:
+                    listN.remove('$')
+            
+            # When it is a terminal #! (1)
+            elif enumlist[i][1] != '$':
+                isp = False
+                listN = list(set(listN + [enumlist[i][1]]))
+                break
+        
+        # Before it, all empty, so A => $     
+        if isp:
+            listN.append('$') #! (3)
+
+        for node in listN:
+            Table[(key[0], node)] = [key[1], values]
+        
+        #! (2)
+        if isp:
+            for node in list(FOLLOW_LIST.get(key[0])):
+                Table[(key[0], node)] = [key[1], '$']
+        
+        
+        for a in Table.items():
+            #//print(a)
+            pass
         
         
         
@@ -218,5 +318,3 @@ if __name__ == '__main__':
     
     make_Parsing_Tables()
     print('Have Built Parsing Tables.')
-    
-    

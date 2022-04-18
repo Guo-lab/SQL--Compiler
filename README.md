@@ -15,5 +15,7 @@ http://osdev.foofun.cn/index.php?title=Making_a_Compiler
 值得注意的是，这种划分纯粹是为了方便编译器开发人员。 大多数类型的 parsers 解析器 可以轻松读取字符流，而不是分词令牌流，因此不需要单独的扫描器。 一些非常强大的解析器类甚至可以 “在阅读完成之前” 确定语句的语义含义，因此不需要语义分析器。 不过，它们可能会更难理解和使用。
 
 # `Lexer` is what I have done.
-# `lexer` is fixed one which could pass all other tests.
+# `Lexer2.0` is fixed one which could pass all other tests. 
 # `Parser` python one
+
+Lexer2.0 and Parser. Learn them from Xv Zihan.
