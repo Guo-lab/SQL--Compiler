@@ -40,7 +40,7 @@ def make_grammar():
         Grammar2[(line.split('-> ')[0].split('.')[1].strip(), line.split('-> ')[0].split('.')[0]) ] = line.split('-> ')[1].strip('\n')
     file.close()
 
-    for a in Grammar.items():
+    for a in Grammar2.items():
         #//print(a)
         pass
     
@@ -286,6 +286,7 @@ def make_Parsing_Tables():
 
         for node in listN:
             Table[(key[0], node)] = [key[1], values]
+            #//print(key[1])
         
         #! (2)
         if isp:
@@ -305,6 +306,41 @@ def make_Parsing_Tables():
         
         
         
+ANS = []
+# 规约序列 
+def gui():
+    stack = ['root']
+    seq = 1
+    for i,[str,type] in enumerate(Tokens):   
+        new_str = ''
+        if type == 'KW' or type == 'OP' or type == 'SE':
+            new_str = str
+        else:
+            new_str = type
+
+        state = ''
+        ans = ''
+        while state != 'move':
+            sk_top = stack.pop()
+            if sk_top != new_str:
+                state = 'reduction'
+                list = Table[(sk_top, new_str)]
+                for s in reversed(list[1].split(' ')):
+                    if s != '$' and s != 'BY':
+                        stack.append(s)
+                ans = f'{seq}\t{list[0]}\t{sk_top}#{new_str}\t{state}'    
+            else:
+                state = 'move'
+                ans = f'{seq}\t/\t{sk_top}#{new_str}\t{state}'
+            print(ans)
+            seq += 1
+            ANS.append(ans)
+
+    with open('./ANS.txt', 'w', encoding='utf-8') as f:
+        for a in ANS:
+            f.write(a+'\n')
+        
+        
 if __name__ == '__main__':
     # Get Tokens
     make_token()
@@ -318,3 +354,7 @@ if __name__ == '__main__':
     
     make_Parsing_Tables()
     print('Have Built Parsing Tables.')
+    
+    
+    
+    gui()

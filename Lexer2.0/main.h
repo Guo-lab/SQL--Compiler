@@ -12,6 +12,7 @@ enum TokenType { KW=100, IDN, INT, FLOAT, STRING, OP, SE, OTHER };
 enum class State { BEGIN=200, IN_KW, IN_IDN, IN_INT, IN_FLOAT, IN_OP, IN_SE, IN_STR, END };
 State state;
 
+
 static map<TokenType, string> TokenDict= {
     {TokenType::KW,"KW"},
     {TokenType::IDN,"IDN"},
